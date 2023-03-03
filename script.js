@@ -1,31 +1,13 @@
 const grid = document.querySelector('.grid')
-const size = 16
-const bombsCounter = 40
+const size = 9
+const bombsCounter = 10
 const fieldArray = []
 const listLength = size * size
 
 
-console.log(grid)
-
 function randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min) + min) // min included and max not included
 }
-
-function shuffle(array) {
-    let m = array.length
-    let t
-    let i
-
-    while (m) {
-        i = Math.floor(Math.random() * m--)
-        t = array[m]
-        array[m] = array[i]
-        array[i] = t
-    }
-
-    return array
-}
-
 
 function compareArrays(arr1, arr2) {
     let counter = 0
@@ -92,46 +74,41 @@ function getCellValue(index, mines) {
     const cell_1 = index - size - 1
     const cell_2 = index - size
     const cell_3 = index - size + 1
-    const cell_4 = size - 1
-    const cell_6 = size + 1
+    const cell_4 = index - 1
+    const cell_6 = index + 1
     const cell_7 = index + size - 1
     const cell_8 = index + size
     const cell_9 = index + size + 1
 
-    switch (index) {
-        case index === topLeftCell:
-            array.push(cell_6, cell_8, cell_9)
-            break
-        case index === topRightCell:
-            array.push(cell_4, cell_7, cell_8)
-            break
-        case index === bottomLeftCell:
-            array.push(cell_2, cell_3, cell_6)
-            break
-        case index === bottomRightCell:
-            array.push(cell_1, cell_2, cell_4)
-            break
-        case index < size:
-            array.push(cell_4, cell_6, cell_7, cell_8, cell_9)
-            break
-        case index % size === 0:
-            array.push(cell_2, cell_3, cell_6, cell_8, cell_9)
-            break
-        case index % size === size - 1:
-            array.push(cell_1, cell_2, cell_4, cell_7, cell_8)
-            break
-        case index > size - listLength:
-            array.push(cell_1, cell_2, cell_3, cell_4, cell_6)
-            break
-        default:
-            array.push(cell_1, cell_2, cell_3, cell_4, cell_6, cell_7, cell_8, cell_9)
 
+    if (index === topLeftCell) {
+        array.push(cell_6, cell_8, cell_9)
+    } else if (index === topRightCell) {
+        array.push(cell_4, cell_7, cell_8)
+    } else if (index === bottomLeftCell) {
+        array.push(cell_2, cell_3, cell_6)
+    } else if (index === bottomRightCell) {
+        array.push(cell_1, cell_2, cell_4)
+    } else if (index < size) {
+        array.push(cell_4, cell_6, cell_7, cell_8, cell_9)
+    } else if (index % size === 0) {
+        array.push(cell_2, cell_3, cell_6, cell_8, cell_9)
+    } else if (index % size === size - 1) {
+        array.push(cell_1, cell_2, cell_4, cell_7, cell_8)
+    } else if (index > size - listLength) {
+        array.push(cell_1, cell_2, cell_3, cell_4, cell_6)
+    } else {
+        array.push(cell_1, cell_2, cell_3, cell_4, cell_6, cell_7, cell_8, cell_9)
     }
 
-    console.log(array, mines, compareArrays(array, mines))
-
-    return `${compareArrays(array, mines)}`
+    return compareArrays(array, mines)
 }
+
+function onCellClick (e) {
+    console.log(e.target.dataset.position)
+    console.log('jkbjkbjkbjkb')
+}
+
 
 function generateGrid() {
     let content = ''
@@ -141,6 +118,12 @@ function generateGrid() {
     })
 
     grid.innerHTML = content
+
+    const cells = document.querySelectorAll('.cell')
+
+    cells.forEach((cell) => {
+        cell.addEventListener('click', onCellClick)
+    })
 
 }
 
